@@ -33,13 +33,7 @@ import {
 ────────────────────────────────────────────────────────── */
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyC30qHrnaP9tTqc31tYrslFToEsgU0Kpig",
-  authDomain: "exam-short-notes.firebaseapp.com",
-  projectId: "exam-short-notes",
-  storageBucket: "exam-short-notes.firebasestorage.app",
-  messagingSenderId: "112667242977",
-  appId: "1:112667242977:web:36298cb233280917cae2a0",
-  measurementId: "G-B175YLQ1KL"
+
 };
 
 /* ── INIT ─────────────────────────────────────────────────── */
