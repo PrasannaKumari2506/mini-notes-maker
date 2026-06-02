@@ -81,6 +81,7 @@ Prasanna Kumari - [GitHub Profile](https://www.google.com/search?q=https://githu
 
 Project Link: [https://github.com/PrasannaKumari2506/mini-notes-maker](https://www.google.com/search?q=https://github.com/PrasannaKumari2506/mini-notes-maker)
 
+[Demo Link](https://short-notes-organizer.netlify.app/)
 ```
 
 ```
