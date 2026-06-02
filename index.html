@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ShortNotes — Exam Revision Companion</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     TOAST CONTAINER
+═══════════════════════════════════════════ -->
+<div id="toastContainer" class="toast-container"></div>
+
+<!-- ═══════════════════════════════════════════
+     AUTH SCREEN
+═══════════════════════════════════════════ -->
+<div id="authScreen" class="auth-screen">
+  <div class="auth-bg-grid"></div>
+  <div class="auth-card">
+    <div class="auth-brand">
+      <span class="auth-logo">◈</span>
+      <h1 class="auth-title">ShortNotes</h1>
+      <p class="auth-tagline">Fast recall. Clear thinking. Exam ready.</p>
+    </div>
+
+    <!-- Login Form -->
+    <form id="loginForm" class="auth-form active">
+      <h2 class="form-heading">Welcome back</h2>
+      <div class="field-group">
+        <label class="field-label">Email</label>
+        <input type="email" id="loginEmail" class="field-input" placeholder="you@example.com" autocomplete="email" required/>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Password</label>
+        <input type="password" id="loginPassword" class="field-input" placeholder="••••••••" autocomplete="current-password" required/>
+      </div>
+      <button type="submit" class="btn-auth" id="loginBtn">
+        <span class="btn-text">Sign In</span>
+        <span class="btn-loader hidden"></span>
+      </button>
+      <p class="auth-switch">No account? <a href="#" id="goToSignup">Create one →</a></p>
+    </form>
+
+    <!-- Signup Form -->
+    <form id="signupForm" class="auth-form">
+      <h2 class="form-heading">Create account</h2>
+      <div class="field-group">
+        <label class="field-label">Display Name</label>
+        <input type="text" id="signupName" class="field-input" placeholder="Your name" required/>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Email</label>
+        <input type="email" id="signupEmail" class="field-input" placeholder="you@example.com" autocomplete="email" required/>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Password</label>
+        <input type="password" id="signupPassword" class="field-input" placeholder="Min 6 characters" autocomplete="new-password" required/>
+      </div>
+      <button type="submit" class="btn-auth" id="signupBtn">
+        <span class="btn-text">Create Account</span>
+        <span class="btn-loader hidden"></span>
+      </button>
+      <p class="auth-switch">Already have an account? <a href="#" id="goToLogin">Sign in →</a></p>
+    </form>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     MAIN APP
+═══════════════════════════════════════════ -->
+<div id="appScreen" class="app-screen hidden">
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="sidebar-toggle" id="sidebarToggle" title="Toggle sidebar (Ctrl+B)">
+        <span></span><span></span><span></span>
+      </button>
+      <a class="app-brand" href="#">
+        <span class="brand-mark">◈</span>
+        <span class="brand-name">ShortNotes</span>
+      </a>
+    </div>
+
+    <div class="topbar-search">
+      <span class="search-ic">⌕</span>
+      <input type="text" id="globalSearch" class="search-bar" placeholder="Search notes… (Ctrl+K)"/>
+      <kbd class="search-kbd" id="searchKbd">Ctrl K</kbd>
+    </div>
+
+    <div class="topbar-right">
+      <button class="icon-btn" id="themeToggle" title="Toggle theme (Ctrl+D)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+      </button>
+      <button class="btn-new-note" id="quickAddBtn" title="New Note (Ctrl+N)">
+        <span>+</span> New Note
+      </button>
+      <div class="user-menu" id="userMenu">
+        <div class="user-avatar" id="userAvatar">?</div>
+        <div class="user-dropdown" id="userDropdown">
+          <div class="user-info">
+            <span class="user-name" id="userName">—</span>
+            <span class="user-email" id="userEmail">—</span>
+          </div>
+          <hr class="dropdown-divider"/>
+          <button class="dropdown-item" id="logoutBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+            Sign Out
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-body">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-section">
+        <p class="sidebar-section-label">Overview</p>
+        <nav class="sidebar-nav">
+          <a class="nav-item active" data-filter="all" href="#">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            All Notes
+            <span class="nav-count" id="countAll">0</span>
+          </a>
+          <a class="nav-item" data-filter="pinned" href="#">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            Pinned
+            <span class="nav-count" id="countPinned">0</span>
+          </a>
+          <a class="nav-item" data-filter="important" href="#">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Important
+            <span class="nav-count" id="countImportant">0</span>
+          </a>
+          <a class="nav-item" data-filter="to-revise" href="#">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+            To Revise
+            <span class="nav-count" id="countRevise">0</span>
+          </a>
+          <a class="nav-item" data-filter="memorized" href="#">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            Memorized
+            <span class="nav-count" id="countMemorized">0</span>
+          </a>
+        </nav>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-header">
+          <p class="sidebar-section-label">Subjects</p>
+          <button class="add-subject-btn" id="addSubjectBtn" title="Add subject">+</button>
+        </div>
+        <nav class="sidebar-nav" id="subjectNav">
+          <!-- dynamically populated -->
+        </nav>
+      </div>
+
+      <div class="sidebar-section sidebar-bottom">
+        <div class="revision-mode-toggle">
+          <span class="rev-mode-label">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            Quick Revision
+          </span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="revisionModeToggle"/>
+            <span class="toggle-thumb"></span>
+          </label>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content" id="mainContent">
+
+      <!-- Dashboard stats -->
+      <div class="dashboard-bar" id="dashboardBar">
+        <div class="dash-stat">
+          <span class="dash-num" id="dashTotal">0</span>
+          <span class="dash-lbl">Total Notes</span>
+        </div>
+        <div class="dash-divider"></div>
+        <div class="dash-stat">
+          <span class="dash-num accent" id="dashImportant">0</span>
+          <span class="dash-lbl">Important</span>
+        </div>
+        <div class="dash-divider"></div>
+        <div class="dash-stat">
+          <span class="dash-num warn" id="dashRevise">0</span>
+          <span class="dash-lbl">To Revise</span>
+        </div>
+        <div class="dash-divider"></div>
+        <div class="dash-stat">
+          <span class="dash-num ok" id="dashMemo">0</span>
+          <span class="dash-lbl">Memorized</span>
+        </div>
+      </div>
+
+      <!-- Filter / Sort bar -->
+      <div class="filter-bar">
+        <div class="filter-chips" id="filterChips">
+          <button class="filter-chip active" data-priority="all">All Priority</button>
+          <button class="filter-chip" data-priority="high">🔴 High</button>
+          <button class="filter-chip" data-priority="medium">🟡 Medium</button>
+          <button class="filter-chip" data-priority="low">🟢 Low</button>
+        </div>
+        <div class="filter-sort">
+          <select id="sortSelect" class="sort-select">
+            <option value="updatedAt">Latest Updated</option>
+            <option value="createdAt">Date Created</option>
+            <option value="title">Title A→Z</option>
+            <option value="priority">Priority</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Notes Grid -->
+      <div class="notes-grid" id="notesGrid">
+        <!-- populated by JS -->
+      </div>
+
+      <!-- Empty state -->
+      <div class="empty-state hidden" id="emptyState">
+        <div class="empty-icon">◈</div>
+        <h3 class="empty-title">No notes here yet</h3>
+        <p class="empty-sub">Hit <kbd>Ctrl+N</kbd> or click <strong>+ New Note</strong> to get started.</p>
+      </div>
+
+      <!-- Loading state -->
+      <div class="loading-state hidden" id="loadingState">
+        <div class="loading-dots"><span></span><span></span><span></span></div>
+        <p>Loading your notes…</p>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     NOTE MODAL (Create / Edit)
+═══════════════════════════════════════════ -->
+<div class="modal-overlay hidden" id="noteModalOverlay">
+  <div class="note-modal" id="noteModal" role="dialog" aria-modal="true" aria-labelledby="modalHeading">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modalHeading">New Note</h2>
+      <div class="modal-header-actions">
+        <span class="char-counter" id="charCounter">0 / 1200</span>
+        <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+      </div>
+    </div>
+
+    <div class="modal-body">
+      <div class="modal-row">
+        <div class="field-group flex-3">
+          <label class="field-label">Title <span class="req">*</span></label>
+          <input type="text" id="noteTitle" class="field-input" placeholder="Note title…" maxlength="100"/>
+        </div>
+        <div class="field-group flex-1">
+          <label class="field-label">Priority</label>
+          <select id="notePriority" class="field-input field-select">
+            <option value="medium">🟡 Medium</option>
+            <option value="high">🔴 High</option>
+            <option value="low">🟢 Low</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="modal-row">
+        <div class="field-group flex-1">
+          <label class="field-label">Subject</label>
+          <input type="text" id="noteSubject" class="field-input" placeholder="e.g. Physics, OS, DBMS…" list="subjectList"/>
+          <datalist id="subjectList"></datalist>
+        </div>
+        <div class="field-group flex-1">
+          <label class="field-label">Status</label>
+          <select id="noteStatus" class="field-input field-select">
+            <option value="none">— None —</option>
+            <option value="important">⚡ Important</option>
+            <option value="to-revise">🔁 To Revise</option>
+            <option value="memorized">✅ Memorized</option>
+          </select>
+        </div>
+        <div class="field-group flex-1">
+          <label class="field-label">Color Label</label>
+          <div class="color-picker" id="colorPicker">
+            <span class="color-swatch active" data-color="#6c8aff" style="background:#6c8aff"></span>
+            <span class="color-swatch" data-color="#34d399" style="background:#34d399"></span>
+            <span class="color-swatch" data-color="#fbbf24" style="background:#fbbf24"></span>
+            <span class="color-swatch" data-color="#f87171" style="background:#f87171"></span>
+            <span class="color-swatch" data-color="#a78bfa" style="background:#a78bfa"></span>
+            <span class="color-swatch" data-color="#fb923c" style="background:#fb923c"></span>
+            <span class="color-swatch" data-color="#22d3ee" style="background:#22d3ee"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Content <span class="req">*</span> <span class="label-hint">Keep it short. Max 1200 chars.</span></label>
+        <textarea id="noteContent" class="field-input field-textarea" placeholder="Write your short note here. Focus on key points, not full paragraphs…" maxlength="1200"></textarea>
+      </div>
+
+      <div class="modal-row">
+        <div class="field-group flex-1">
+          <label class="field-label">Keywords <span class="label-hint">comma separated</span></label>
+          <input type="text" id="noteKeywords" class="field-input" placeholder="e.g. deadlock, semaphore, mutex"/>
+        </div>
+        <div class="field-group flex-1">
+          <label class="field-label">Tags <span class="label-hint">comma separated</span></label>
+          <input type="text" id="noteTags" class="field-input" placeholder="e.g. exam, chapter-3, formula"/>
+        </div>
+      </div>
+
+      <div class="modal-footer-options">
+        <label class="checkbox-label">
+          <input type="checkbox" id="notePin" class="checkbox-inp"/>
+          <span class="checkbox-box"></span>
+          <span>📌 Pin this note</span>
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" id="noteFav" class="checkbox-inp"/>
+          <span class="checkbox-box"></span>
+          <span>⭐ Favourite</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <div class="autosave-status" id="autosaveStatus">
+        <span class="as-dot"></span> All changes saved
+      </div>
+      <div class="modal-actions">
+        <button class="btn-ghost" id="modalCancelBtn">Cancel</button>
+        <button class="btn-primary" id="modalSaveBtn">Save Note</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     NOTE DETAIL / QUICK REVISION MODAL
+═══════════════════════════════════════════ -->
+<div class="modal-overlay hidden" id="detailOverlay">
+  <div class="detail-modal" id="detailModal">
+    <div class="detail-header">
+      <div class="detail-meta">
+        <span class="detail-subject" id="detailSubject"></span>
+        <span class="detail-status-badge" id="detailStatus"></span>
+        <span class="detail-priority-badge" id="detailPriority"></span>
+      </div>
+      <div class="detail-actions">
+        <button class="icon-btn" id="detailCopy" title="Copy note">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        </button>
+        <button class="icon-btn" id="detailEdit" title="Edit note">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
+        <button class="icon-btn danger-btn" id="detailDelete" title="Delete note">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+        </button>
+        <button class="icon-btn" id="detailClose">✕</button>
+      </div>
+    </div>
+    <h2 class="detail-title" id="detailTitle"></h2>
+    <div class="detail-content" id="detailContent"></div>
+    <div class="detail-keywords" id="detailKeywords"></div>
+    <div class="detail-tags" id="detailTags"></div>
+    <div class="detail-ts">
+      <span id="detailUpdated"></span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     ADD SUBJECT MODAL
+═══════════════════════════════════════════ -->
+<div class="modal-overlay hidden" id="subjectModalOverlay">
+  <div class="mini-modal">
+    <h3 class="mini-modal-title">Add Subject</h3>
+    <input type="text" id="newSubjectInput" class="field-input" placeholder="Subject name…"/>
+    <div class="mini-modal-actions">
+      <button class="btn-ghost" id="subjectModalCancel">Cancel</button>
+      <button class="btn-primary" id="subjectModalSave">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     REVISION MODE OVERLAY
+═══════════════════════════════════════════ -->
+<div class="revision-overlay hidden" id="revisionOverlay">
+  <div class="revision-card-wrap">
+    <div class="revision-top">
+      <span class="revision-label">Quick Revision Mode</span>
+      <button class="icon-btn" id="revisionClose">✕</button>
+    </div>
+    <div class="revision-progress">
+      <div class="rev-prog-bar"><div class="rev-prog-fill" id="revProgFill"></div></div>
+      <span class="rev-prog-text" id="revProgText">1 / 0</span>
+    </div>
+    <div class="revision-card" id="revisionCard">
+      <div class="rev-subject" id="revSubject"></div>
+      <h2 class="rev-title" id="revTitle"></h2>
+      <div class="rev-content hidden" id="revContent"></div>
+      <div class="rev-keywords hidden" id="revKeywords"></div>
+    </div>
+    <div class="revision-controls">
+      <button class="rev-btn" id="revPrev">← Prev</button>
+      <button class="rev-btn rev-btn-show" id="revShow">Show Answer</button>
+      <button class="rev-btn" id="revNext">Next →</button>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
